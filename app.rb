@@ -10,3 +10,7 @@ end
 get '/New' do
   erb :New
 end
+
+get '/Posts' do
+  "Hello World"
+end
