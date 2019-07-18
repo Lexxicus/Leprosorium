@@ -31,7 +31,8 @@ configure do
 end
 
 get '/' do
-	erb "Hello! <a href=\"https://github.com/bootstrap-ruby/sinatra-bootstrap\">Original</a> pattern has been modified for <a href=\"http://rubyschool.us/\">Ruby School</a>"			
+  @results = @db.execute 'select * from Posts order by id desc'
+	erb :index
 end
 
 # обработчик get-запроса /New
@@ -48,7 +49,6 @@ end
 # (браузер отправляет данные на сервер)
 
 post '/New' do
-  init_db
   # получаем переменную из post запроса
   @content = params[:newpost]
   # проверка на пустой пост
@@ -56,6 +56,7 @@ post '/New' do
     @error = 'Type post text'
     return erb :New
   else
+    # сосхранение данных в дб
     @db.execute 'insert into Posts (content, created_date) values (?,datetime())',[@content]
     return erb 'Your post added'
   end
