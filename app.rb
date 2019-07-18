@@ -62,8 +62,22 @@ post '/New' do
   end
 end
 # Вывод информации о посте
-get '/details/:post_id' do
+get '/detail/:post_id' do
+  # получаем переменную из url
   post_id = params[:post_id]
+  # получаем список постов
+  #(у нас будет только один пост)
+  @results = @db.execute 'select * from Posts where id = ?', [post_id]
+  # выбираем этот один пост
+  @row = @results[0]
+  erb :detail
+end
+# Обработчик пост запроса
+#(браузер отправляет данные на сервер, мы хи принимаем)
+post '/detail/:post_id' do
+  # получаем переменную из юрл
+  post_id = params[:post_id]
+  # получение переменной из поста
+  comment = params[:comment]
 
-  erb "Display post id = #{post_id}"
 end
