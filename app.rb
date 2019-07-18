@@ -51,6 +51,11 @@ post '/New' do
   init_db
   # получаем переменную из post запроса
   @content = params[:newpost]
+  # проверка на пустой пост
+  if @content.length <= 0
+    @error = 'Type post text'
+    return erb :New
+  end
+
   @db.execute 'insert into Posts (content) values (?)',[@content]
-  erb "You typed: #{@content}"
 end
