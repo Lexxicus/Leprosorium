@@ -55,7 +55,6 @@ end
 
 # обрабочик пост запроса /New
 # (браузер отправляет данные на сервер)
-
 post '/New' do
   # получаем переменную из post запроса
   @content = params[:newpost]
@@ -69,6 +68,7 @@ post '/New' do
     redirect to('/')
   end
 end
+
 # Вывод информации о посте
 get '/detail/:post_id' do
   # получаем переменную из url
@@ -78,8 +78,12 @@ get '/detail/:post_id' do
   @results = @db.execute 'select * from Posts where id = ?', [post_id]
   # выбираем этот один пост
   @row = @results[0]
+  # Выбираем коментарии для поста
+  @comments = @db.execute 'select * from Comments where post_id = ? and order by id', [post_id]
+
   erb :detail
 end
+
 # Обработчик пост запроса
 #(браузер отправляет данные на сервер, мы хи принимаем)
 post '/detail/:post_id' do
@@ -87,5 +91,26 @@ post '/detail/:post_id' do
   post_id = params[:post_id]
   # получение переменной из поста
   comment = params[:comment]
+# добавление комента в дб
+  if comment.length <= 0
+    @error = 'Comment could not be empty'
+    return erb 'Comment could not be empty'
+  else
+    # сосхранение данных в дб
+    @db.execute 'insert into Comments
+     (
+        content,
+        created_date,
+        post_id
+     )
+        values
+     (
+        ?,
+        datetime(),
+        ?
+     )',[comment,post_id]
+    # перенаправление на страницу поста
+    redirect to('/detail/'+ post_id)
+  end
 
 end
