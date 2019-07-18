@@ -1,5 +1,6 @@
 <h4>Post detils</h4>
 
+<!-- Вывод поста -->
 <p>
   <%= @row['content'] %>
   <br />
@@ -9,6 +10,18 @@
 <br />
 <h4>Comments:</h4>
 
+<!-- Вывод коментариев для поста -->
+<% @comments.each do |comment| %>
+    <p>
+      <%= comment['content'] %>
+      <br />
+      <span style="font-size: 75%; color: #999999">Added at: <%= comment['created_date'] %>
+      <br />
+    </p>
+    <hr />
+<% end %>
+
+<!-- Форма ввода коментария -->
 <p>
 <form action="/detail/<%= @row['id'] %>" method="post" role="form" >
   <textarea class="form-control" rows="6" name="comment" placeholder="Type comment text here"></textarea>

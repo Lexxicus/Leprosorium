@@ -79,7 +79,7 @@ get '/detail/:post_id' do
   # выбираем этот один пост
   @row = @results[0]
   # Выбираем коментарии для поста
-  @comments = @db.execute 'select * from Comments where post_id = ? and order by id', [post_id]
+  @comments = @db.execute 'select * from Comments where post_id = ? order by id', [post_id]
 
   erb :detail
 end
